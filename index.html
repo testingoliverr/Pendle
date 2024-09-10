@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pendle x Base Pitch</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+      rel="stylesheet"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+      }
+
+      #root {
+        min-height: 100%;
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #8080ff 50%,
+          #0000ff 100%
+        );
+      }
+
+      .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .login-form {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 300px;
+      }
+
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        width: 100px;
+        height: auto;
+        margin: 0 10px;
+      }
+
+      input,
+      button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #0000ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0000cc;
+      }
+
+      .error {
+        color: red;
+        margin-top: 10px;
+      }
+
+      .presentation-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .section {
+        background: rgba(255, 255, 255, 0.9);
+        margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #0000ff;
+      }
+
+      ul,
+      ol {
+        padding-left: 20px;
+      }
+
+      .link {
+        color: #0000ff;
+        text-decoration: none;
+      }
+
+      .link:hover {
+        text-decoration: underline;
+      }
+
+      .title-section {
+        background: rgba(255, 255, 255, 0.9);
+        margin-bottom: 30px;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .title-section .logo-container {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .title-section .logo-pendle {
+        width: 210px;
+        height: auto;
+        margin: 0 20px;
+      }
+
+      .title-section .logo-base {
+        width: 150px;
+        height: auto;
+        margin: 0 20px;
+      }
+
+      .main-title {
+        font-size: 3em;
+        color: #0000ff;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .subtitle {
+        font-size: 1.5em;
+        color: #4040ff;
+        font-style: italic;
+      }
+
+      .section-subtitle {
+        font-size: 1.2em;
+        color: #4040ff;
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+
+      .subheader {
+        font-size: 1.2em;
+        color: #4040ff;
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+
+      .right-aligned {
+        float: right;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .grid-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+      }
+
+      .icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+      }
+
+      .grid-item h3 {
+        margin-top: 0;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .grid-item p {
+        margin-top: 0;
+      }
+
+      .section:nth-of-type(3) .grid-item {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .section:nth-of-type(3) .grid-item h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 1em;
+        font-weight: bold;
+      }
+
+      .chart {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      .footnote {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 20px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .footnote + .footnote {
+        margin-top: 5px;
+      }
+
+      .additional-content {
+        display: flex;
+        gap: 40px;
+        margin-top: 30px;
+        align-items: flex-start;
+      }
+
+      .content-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .quote-box {
+        background: #e6e6ff;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+        margin-top: 10px;
+      }
+
+      .quote-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+
+      .quote-box blockquote {
+        margin: 0;
+        font-style: italic;
+        font-size: 0.9em;
+      }
+
+      .quote-box cite {
+        display: block;
+        margin-top: 10px;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 0.8em;
+      }
+
+      .info-box-container {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+      }
+
+      .info-box {
+        background: #e6e6ff;
+        border-radius: 8px;
+        padding: 15px;
+        display: inline-block;
+        margin-right: 20px;
+      }
+
+      .info-box-description {
+        flex: 1;
+      }
+
+      .large-text {
+        font-size: 2em;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        margin-top: 0px;
+      }
+
+      .info-icon {
+        width: 50px;
+        height: 50px;
+        margin-right: 20px;
+      }
+
+      /* Updated styles for the collaborative partnership section */
+      .partnership-section {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .partnership-content {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+      }
+
+      .partnership-column {
+        flex: 1;
+        background: #f0f0ff;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .partnership-logo {
+        width: 80px;
+        height: auto;
+        margin-bottom: 20px;
+      }
+
+      .partnership-column h3 {
+        color: #0000ff;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      .partnership-column ul {
+        padding-left: 20px;
+        text-align: left;
+      }
+
+      .partnership-column li {
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .additional-content,
+        .partnership-content {
+          flex-direction: column;
+        }
+        .info-box-container {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .info-box {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const LoginForm = ({ onLogin, error }) => {
+        const [password, setPassword] = React.useState("");
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          onLogin(password);
+        };
+
+        return (
+          <div className="login-container">
+            <div className="login-form">
+              <div className="logo-container">
+                <img
+                  src="/pendle logo.png"
+                  alt="Pendle Logo"
+                  className="logo"
+                />
+                <img src="/base logo.png" alt="Base Logo" className="logo" />
+              </div>
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button type="submit">Enter</button>
+              </form>
+              {error && <p className="error">{error}</p>}
+            </div>
+          </div>
+        );
+      };
+
+      const PresentationContent = () => (
+        <div className="presentation-container">
+          <section className="title-section" data-aos="fade-up">
+            <div className="logo-container">
+              <img
+                src="/pendle logo.png"
+                alt="Pendle Logo"
+                className="logo-pendle"
+              />
+              <img src="/base logo.png" alt="Base Logo" className="logo-base" />
+            </div>
+            <h1 className="main-title">PENDLE X BASE</h1>
+            <p className="subtitle">Unlocking New Growth Opportunities</p>
+          </section>
+
+          <section className="section" data-aos="fade-up">
+            <h2>What is Base?</h2>
+            <p className="section-subtitle">
+              The easiest place to build...{" "}
+              <span className="right-aligned">
+                ... and the easiest place to use products
+              </span>
+            </p>
+
+            <div className="grid-container">
+              <div className="grid-item">
+                <img src="/OP Stack.png" alt="OP Stack" className="icon" />
+                <div>
+                  <h3>The Tech:</h3>
+                  <p>
+                    Built on Optimism's open-source OP Stack, making it easy for
+                    Pendle to expand its EVM-based protocol to Base without
+                    significant technical changes.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid-item">
+                <img src="/c logo.png" alt="Coinbase" className="icon" />
+                <div>
+                  <h3>Backed by Coinbase:</h3>
+                  <p>
+                    Base's roots bring with it greater security and user trust,
+                    with possible onboarding experience that rival Web2
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid-item">
+                <img
+                  src="/developer platform.png"
+                  alt="Developer Platform"
+                  className="icon"
+                />
+                <div>
+                  <h3>A developer platform:</h3>
+                  <p>
+                    Easy access to CDP's comprehensive suite of tools (onchain
+                    kit, wallet solutions, APIs & SDKs) and infrastructure.
+                    Building on Base is well documented.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid-item">
+                <img src="/speed icon.png" alt="Speed" className="icon" />
+                <div>
+                  <h3>Better performance:</h3>
+                  <p>
+                    Base TPS is{" "}
+                    <a
+                      href="https://chainspect.app/compare/base-vs-ethereum"
+                      className="link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      4x higher
+                    </a>{" "}
+                    than ETH, making it faster and more scalable, while charging
+                    users a fraction of the cost in gas.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="section" data-aos="fade-up">
+            <h2>Why expand to Base?</h2>
+            <p className="subheader">Tap into rapid on-chain growth</p>
+
+            <div className="grid-container">
+              <div className="grid-item">
+                <h4>+811% Weekly Active Addresses (4.1M vs. 0.45M)</h4>
+                <img
+                  src="/Weekly Active Addresses.png"
+                  alt="Weekly Active Addresses"
+                  className="chart"
+                />
+              </div>
+
+              <div className="grid-item">
+                <h4>+162% Total Value Locked ($1.5B vs. $0.6B)</h4>
+                <img
+                  src="/Total Value Bridged.png"
+                  alt="Total Value Locked"
+                  className="chart"
+                />
+              </div>
+
+              <div className="grid-item">
+                <h4>+2,317% Weekly New Addresses (2.9M vs. 0.12M)</h4>
+                <img
+                  src="/Weekly New Addresses.png"
+                  alt="Weekly New Addresses"
+                  className="chart"
+                />
+              </div>
+
+              <div className="grid-item">
+                <h4>+871% Weekly Transactions (30.1M vs. 3.1M)</h4>
+                <img
+                  src="/Weekly Transactions.png"
+                  alt="Weekly Transactions"
+                  className="chart"
+                />
+              </div>
+            </div>
+
+            <p className="footnote">
+              <a
+                href="https://dune.com/watermeloncrypto/base"
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Source
+              </a>
+              ; Growth figures represent the last 6 months of data. Exact
+              numbers may have changed since most recent data pull.
+            </p>
+
+            <div className="additional-content">
+              <div className="content-column">
+                <h3 className="subheader">DeFi Focus</h3>
+                <p>
+                  Base has quickly become a preferred Layer 2 for DeFi projects,
+                  supporting protocols like Uniswap, Aave, and others...
+                </p>
+                <p>But don't just take it from us:</p>
+                <div className="quote-box">
+                  <img
+                    src="/paul.jpg"
+                    alt="Paul Frambot"
+                    className="quote-image"
+                  />
+                  <blockquote>
+                    "I believe Base can outgrow the current deployment on
+                    Ethereum over the next year... Base is being built to
+                    onboard the next billion users: low fees (op stack), UX (AA
+                    Kit), distribution & brand (coinbase)" -Paul Frambot,
+                    co-founder & CEO @ Morpho Labs
+                  </blockquote>
+                </div>
+              </div>
+              <div className="content-column">
+                <h3 className="subheader">
+                  Long-term Retail & Institutional Liquidity
+                </h3>
+                <div className="info-box-container">
+                  <div className="info-box">
+                    <span className="large-text">$171B</span>
+                    <span>under custody</span>
+                  </div>
+                  <p className="info-box-description">
+                    Direct fiat-to-DeFi gateways, making it easier for new users
+                    to participate in yield tokenization.
+                  </p>
+                </div>
+
+                <h3 className="subheader">Alignment with Pendle v3</h3>
+                <div className="info-item">
+                  <img
+                    src="/better loan.png"
+                    alt="Loan Icon"
+                    className="info-icon"
+                  />
+                  <p>
+                    Leveraged yield trading, tokenized borrowing rates planned
+                    for 1Q'25... Aave, Compound, Morpho, and others available on
+                    Base.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p className="footnote">
+              <a
+                href="https://x.com/PaulFrambot/status/1803066611990995344"
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Tweet source
+              </a>
+              ;{" "}
+              <a
+                href="https://s27.q4cdn.com/397450999/files/doc_financials/2024/05/Shareholder-Letter-Q1-2024.pdf"
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Q1 Coinbase Earnings
+              </a>
+              ;{" "}
+              <a
+                href="https://unchainedcrypto.com/podcast/pendle-ripped-in-early-2024-but-usage-has-slowed-down-can-it-recover/"
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                v3 Discussion
+              </a>
+            </p>
+          </section>
+
+          <section className="section partnership-section" data-aos="fade-up">
+            <h2>Building a collaborative partnership</h2>
+            <div className="partnership-content">
+              <div className="partnership-column">
+                <img
+                  src="/base logo.png"
+                  alt="Base Logo"
+                  className="partnership-logo"
+                />
+                <h3>What we committ to...</h3>
+                <ul>
+                  <li>
+                    <strong>Fee incentives:</strong>
+                    <ul>
+                      <li>Free Base Sepolia ETH during testing phase</li>
+                      <li>
+                        Subsidized transaction fees during initial promotion
+                        phase
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Technical & Security Support:</strong>
+                    <ul>
+                      <li>
+                        Enhanced (>50 RPS rate limit) and free RPC endpoint
+                        access
+                      </li>
+                      <li>
+                        Technical assistance for deployment and support for
+                        maintaining the protocol's security standards
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Co-marketing:</strong>
+                    <ul>
+                      <li>
+                        Support for launch by Base team across X and Farcaster
+                      </li>
+                      <li>Featured on Base ecosystem page</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div className="partnership-column">
+                <img
+                  src="/pendle logo.png"
+                  alt="Pendle Logo"
+                  className="partnership-logo"
+                />
+                <h3>... in return for</h3>
+                <ul>
+                  <li>
+                    <strong>Commitment</strong> to launch on Base during v3
+                  </li>
+                  <li>
+                    <strong>Yield Tokenization:</strong> Pendle products will
+                    enhance Base's DeFi ecosystem, bringing innovative features
+                    and expanding use cases
+                  </li>
+                  <li>
+                    <strong>Co-marketing:</strong>
+                    <ul>
+                      <li>
+                        Support for launch on Base by Pendle team across X and
+                        Farcaster
+                      </li>
+                      <li>
+                        Marketing assets to be created by Pendle and approved by
+                        Base
+                      </li>
+                      <li>Featured on Pendle website</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section className="section" data-aos="fade-up">
+            <h2>Let's Build Together</h2>
+            <h3>Next Steps:</h3>
+            <ol>
+              <li>
+                Establish Base x Pendle working group and lines of communication
+              </li>
+              <li>
+                Schedule a technical workshop to discuss the deployment process
+                for Pendle on Base and integration details / requirements.
+              </li>
+              <li>
+                Establish a timeline for Pendle's Base launch, including
+                contract audits and co-marketing strategies.
+              </li>
+            </ol>
+          </section>
+        </div>
+      );
+
+      const App = () => {
+        const [loggedIn, setLoggedIn] = React.useState(false);
+        const [error, setError] = React.useState("");
+
+        React.useEffect(() => {
+          AOS.init({
+            duration: 1000,
+            once: true,
+          });
+        }, []);
+
+        const handleLogin = (password) => {
+          if (password === "PendleBase") {
+            setLoggedIn(true);
+            setError("");
+          } else {
+            setError("Incorrect password");
+          }
+        };
+
+        if (!loggedIn) {
+          return <LoginForm onLogin={handleLogin} error={error} />;
+        }
+
+        return <PresentationContent />;
+      };
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "vanilla-js-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "@babel/standalone": "7.25.6",
+    "aos": "2.3.4"
+  }
+}
